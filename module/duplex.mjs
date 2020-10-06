@@ -161,7 +161,7 @@ function _generate(mirror, obj, patches, path, invertible) {
     for (var t = 0; t < newKeys.length; t++) {
         var key = newKeys[t];
         if (!hasOwnProperty(mirror, key) && obj[key] !== undefined) {
-            patches.push({ op: "add", path: path + "/" + escapePathComponent(key), value: _deepClone(obj[key]) });
+            patches.push({ op: "add", path: path + "/-", value: _deepClone(obj[key]) });
         }
     }
 }

@@ -1,4 +1,4 @@
-/*! fast-json-patch, version: 3.0.0-1 */
+/*! fast-json-patch, version: 3.0.2 */
 var jsonpatch =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -519,7 +519,7 @@ function applyOperation(document, operation, validateOperation, mutateDocument, 
             obj = obj[key];
             // If we have more keys in the path, but the next value isn't a non-null object,
             // throw an OPERATION_PATH_UNRESOLVABLE error instead of iterating again.
-            if (t < len && (!obj || typeof obj !== "object")) {
+            if (validateOperation && t < len && (!obj || typeof obj !== "object")) {
                 throw new exports.JsonPatchError('Cannot perform operation at the desired path', 'OPERATION_PATH_UNRESOLVABLE', index, operation, document);
             }
         }
@@ -872,7 +872,7 @@ function _generate(mirror, obj, patches, path, invertible) {
         var oldVal = mirror[key];
         if (helpers_js_1.hasOwnProperty(obj, key) && !(obj[key] === undefined && oldVal !== undefined && Array.isArray(obj) === false)) {
             var newVal = obj[key];
-            if (typeof oldVal == "object" && oldVal != null && typeof newVal == "object" && newVal != null) {
+            if (typeof oldVal == "object" && oldVal != null && typeof newVal == "object" && newVal != null && Array.isArray(oldVal) === Array.isArray(newVal)) {
                 _generate(oldVal, newVal, patches, path + "/" + helpers_js_1.escapePathComponent(key), invertible);
             }
             else {
@@ -906,7 +906,7 @@ function _generate(mirror, obj, patches, path, invertible) {
     for (var t = 0; t < newKeys.length; t++) {
         var key = newKeys[t];
         if (!helpers_js_1.hasOwnProperty(mirror, key) && obj[key] !== undefined) {
-            patches.push({ op: "add", path: path + "/" + helpers_js_1.escapePathComponent(key), value: helpers_js_1._deepClone(obj[key]) });
+            patches.push({ op: "add", path: path + "/-", value: helpers_js_1._deepClone(obj[key]) });
         }
     }
 }

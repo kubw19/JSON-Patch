@@ -17,7 +17,7 @@ var beforeDict = new WeakMap();
 
 class Mirror {
   obj: any;
-  observers : Map<Function, ObserverInfo> = new Map();
+  observers: Map<Function, ObserverInfo> = new Map();
   value: Object | Array<any>;
 
   constructor(obj: Object) {
@@ -57,7 +57,7 @@ export function unobserve<T>(root: T, observer: Observer<T>) {
 /**
  * Observes changes made to an object, which can then be retrieved using generate
  */
-export function observe<T>(obj: Object|Array<T>, callback?: (patches: Operation[]) => void): Observer<T> {
+export function observe<T>(obj: Object | Array<T>, callback?: (patches: Operation[]) => void): Observer<T> {
   var patches = [];
   var observer;
   var mirror = getMirror(obj);
@@ -171,12 +171,12 @@ function _generate(mirror, obj, patches, path, invertible) {
           changed = true;
           if (invertible) {
             patches.push({ op: "test", path: path + "/" + escapePathComponent(key), value: _deepClone(oldVal) });
-      	  }
+          }
           patches.push({ op: "replace", path: path + "/" + escapePathComponent(key), value: _deepClone(newVal) });
         }
       }
     }
-    else if(Array.isArray(mirror) === Array.isArray(obj)) {
+    else if (Array.isArray(mirror) === Array.isArray(obj)) {
       if (invertible) {
         patches.push({ op: "test", path: path + "/" + escapePathComponent(key), value: _deepClone(oldVal) });
       }
@@ -198,7 +198,7 @@ function _generate(mirror, obj, patches, path, invertible) {
   for (var t = 0; t < newKeys.length; t++) {
     var key = newKeys[t];
     if (!hasOwnProperty(mirror, key) && obj[key] !== undefined) {
-      patches.push({ op: "add", path: path + "/" + escapePathComponent(key), value: _deepClone(obj[key]) });
+      patches.push({ op: "add", path: path + "/-", value: _deepClone(obj[key]) });
     }
   }
 }
